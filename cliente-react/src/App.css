@@ -1,5 +1,19 @@
 input{
     margin: 10px;
     width: 100%;
-    font-size: 30px;
+}
+
+button{
+    width: 40%;
+    margin: 10px;
+}
+#contenedor{
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    background: rgb(210, 206, 206);
+}
+#principal{
+    width: 70%;
+    margin-top: 25px
 }

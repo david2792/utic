@@ -8,8 +8,8 @@ const [razon_social,setRazon] = useState('')
 const [direccion,setDireccion] = useState('')
 const [correo,setCorreo] = useState('')
 const [telefono,setTelefono] = useState('')
-
-
+const [mensaje, setMensaje] = useState('')
+const [bandera, setBandera] = useState(false)
 
 
 //obtenemos los datos al iniciar el componente
@@ -35,20 +35,42 @@ const guardarEmpresa = async(e)=>{
     console.log("telefono "+telefono)
     console.log("correo "+correo)
     
+      try {
+            await api.post('/empresa',{
+              razon_social,
+              direccion,
+              telefono,
+              correo
+            })
+            limpiar()
+            setBandera(true)
+            setMensaje("REGISTRO EXITOSO")
+            ListaEmpresa()
+      } catch (error) {
+        setBandera(true)
+        setMensaje("ERROR AL INSERTAR LOS DATOS")
+        console.log("paso")
+      }
+          
 
-    await api.post('/empresa',{
-      razon_social,
-      direccion,
-      telefono,
-      correo
-    })
-    ListaEmpresa()
+      }
+
+function limpiar(){
+  setCorreo('')
+  setDireccion('')
+  setRazon('')
+  setTelefono('')
+  setBandera(false)
 }
   
   return (
-    <div>
-      <h1>Mantener Empresa</h1>
-      <div class="container-fluid text-center ">
+    <div id='contenedor'>
+      <div className="card" id="principal">
+        <div class="card-header">
+          Formulario Empresa
+        </div>
+        <div class="card-body">
+        <div class="container-fluid text-center ">
       <form onSubmit={guardarEmpresa}>
         <div className='row'>
           <div className="col-6">
@@ -63,6 +85,7 @@ const guardarEmpresa = async(e)=>{
           </div>
           <div className="col-6">
           <input 
+            className="form-control form-control-lg"
             placeholder='Ingrese la Direccion'
             type='text'
             value={direccion}
@@ -72,16 +95,18 @@ const guardarEmpresa = async(e)=>{
           </div>
             <div className="row">
               <div className="col-6">
-              <label htmlFor="">Correo</label>
               <input 
+                className="form-control form-control-lg"
+                placeholder='Ingrese el correo'
                 type='text'
                 value={correo}
                 onChange={(e)=>setCorreo(e.target.value)}
               />
               </div>
               <div className="col-6">
-              <label htmlFor="">Telefono</label>
-              <input 
+              <input
+                className="form-control form-control-lg" 
+                placeholder='Ingrese el Telefono'
                 type='text'
                 value={telefono}
                 onChange={(e)=>setTelefono(e.target.value)}
@@ -91,11 +116,21 @@ const guardarEmpresa = async(e)=>{
             </div>
           
            
-          <button type='submit'>guardar</button>
-       
-
+          <button type="button" class="btn btn-warning" onClick={guardarEmpresa}>Guardar</button>
+          <button type="button" class="btn btn-danger" onClick={limpiar}>Limpiar</button>
       </form>
       </div>
+        </div>
+      </div>
+      { bandera && (
+        <div class="alert alert-primary" role="alert">
+            {mensaje}
+        </div>
+      )
+
+      }
+     
+      
       
      <table>
       <thead>
